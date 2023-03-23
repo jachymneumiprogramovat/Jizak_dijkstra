@@ -18,7 +18,7 @@ nodes=[]
 
 for key in config:
   nodes.append(Vrchol(key,[(int(klic),config[key][klic]) for klic in config[key]]))
-
+prvni=nodes[0]
 que.put(prvni)
 prvni.vzdalenost = 0
 prvni.cesta = [1]
