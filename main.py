@@ -1,4 +1,5 @@
 import queue
+import json
 
 que = queue.Queue()
 
@@ -11,14 +12,13 @@ class Vrchol:
         self.vzdalenost = 99999999
         self.cesta = []
 
+configFile=open("config.json","r")
+config = json.load(configFile)
+nodes=[]
 
-prvni = Vrchol(1, [(2, 3)])
-druhy = Vrchol(2, [(1, 3), (4, 1), (5, 3)])
-ctvrty = Vrchol(4, [(2, 1), (5, 1)])
-paty = Vrchol(5, [(4, 1), (2, 3)])
-treti = Vrchol(3, [(1, 100), (2, 200), (4, 400), (5, 500)])
+for key in config:
+  nodes.append(Vrchol(key,[(int(klic),config[key][klic]) for klic in config[key]]))
 
-vrcholi = [prvni, druhy, treti, ctvrty, paty]
 que.put(prvni)
 prvni.vzdalenost = 0
 prvni.cesta = [1]
@@ -26,10 +26,10 @@ while que.qsize() > 0:
     prvek = que.get()
     prvek.visited = True
     for dvojice in prvek.sousedi:
-        soused = vrcholi[dvojice[0] - 1]
+        soused = nodes[dvojice[0] - 1]
         if not soused.visited:
             que.put(soused)
         if prvek.vzdalenost + dvojice[1] < soused.vzdalenost:
             soused.vzdalenost = prvek.vzdalenost + dvojice[1]
             soused.cesta = prvek.cesta + [soused.id]
-print(vrcholi[4].vzdalenost, vrcholi[4].cesta)
+
